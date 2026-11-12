@@ -25,6 +25,9 @@ playback, gapless playback, folders, playlists, search, widgets.
 - MP3: lossless gain adjustment (mp3gain-style) so volume is even in any app
 - FLAC/WAV: rewrite with gain applied (lossless)
 - Optional "Remaster" mode: re-encode M4A/OGG/Opus at high quality with gain applied
+- Optional "Convert to MP3": normalize and encode in a single pass (one encode, no double
+  quality loss). Recommended for FLAC/WAV; warns before converting already-lossy files.
+  Runs in the background with progress
 
 ## Milestone 3 — Playback extras
 - Built-in equalizer with presets
