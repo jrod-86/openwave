@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Openwave: fetch artwork & info -->
+    <string name="set_key_fetch" translatable="false">openwave_fetch_metadata</string>
+    <string name="set_fetch">Fetch artwork &amp; info</string>
+    <string name="set_fetch_desc">Find missing artwork, titles, artists and albums online</string>
+    <string name="lbl_fetch_intro">Openwave will look through your music for songs with missing artwork, titles, artists or albums, then search MusicBrainz and the Cover Art Archive for them. You can approve or skip each match, then save the approved ones into your files.</string>
+    <string name="lbl_fetch_nothing_missing">Every song already has artwork and full info.</string>
+    <string name="fmt_fetch_progress">Searching… %1$d of %2$d songs checked</string>
+    <string name="fmt_fetch_finished">Checked %1$d of %2$d songs</string>
+    <string name="lbl_fetch_scan">Scan library</string>
+    <string name="lbl_fetch_rescan">Scan again</string>
+    <string name="lbl_fetch_stop">Stop</string>
+    <string name="lbl_fetch_approve_all">Approve all found</string>
+    <string name="lbl_fetch_approve">Approve</string>
+    <string name="lbl_fetch_skip">Skip</string>
+    <string name="fmt_fetch_missing">Missing: %s</string>
+    <string name="fmt_fetch_proposed">Found: %1$s by %2$s\n%3$s</string>
+    <string name="lbl_fetch_missing_title">title</string>
+    <string name="lbl_fetch_missing_artist">artist</string>
+    <string name="lbl_fetch_missing_album">album</string>
+    <string name="lbl_fetch_missing_artwork">artwork</string>
+    <string name="lbl_fetch_waiting">Waiting</string>
+    <string name="lbl_fetch_searching">Searching…</string>
+    <string name="lbl_fetch_found">Match found</string>
+    <string name="lbl_fetch_found_no_art">Match found (no artwork)</string>
+    <string name="lbl_fetch_not_found">No match found</string>
+    <string name="lbl_fetch_failed">Couldn\'t search (check your connection)</string>
+    <string name="lbl_fetch_skipped">Skipped</string>
+    <string name="lbl_fetch_approved">Approved</string>
+    <string name="lbl_fetch_saving">Saving…</string>
+    <string name="lbl_fetch_saved">Saved to file</string>
+    <string name="lbl_fetch_save_failed">Couldn\'t save to this file</string>
+    <string name="fmt_fetch_save">Save %d</string>
+    <string name="lbl_fetch_backup">Back up original files first</string>
+    <string name="desc_fetch_cover">Artwork found online</string>
+</resources>

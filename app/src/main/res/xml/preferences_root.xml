@@ -43,6 +43,11 @@
             app:summary="@string/set_rescan_desc"
             app:title="@string/set_rescan" />
 
+        <Preference
+            app:key="@string/set_key_fetch"
+            app:summary="@string/set_fetch_desc"
+            app:title="@string/set_fetch" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -36,6 +36,9 @@
         <action
             android:id="@+id/music_locations_settings"
             app:destination="@id/music_locations_dialog" />
+        <action
+            android:id="@+id/fetch_metadata"
+            app:destination="@id/fetch_fragment" />
     </fragment>
 
     <fragment
@@ -100,6 +103,11 @@
         android:label="separators_dialog"
         tools:layout="@layout/dialog_separators" />
 
+    <fragment
+        android:id="@+id/fetch_fragment"
+        android:name="org.oxycblt.auxio.fetch.FetchFragment"
+        android:label="fetch_fragment"
+        tools:layout="@layout/fragment_fetch" />
     <fragment
         android:id="@+id/about_fragment"
         android:name="org.oxycblt.auxio.settings.AboutFragment"
