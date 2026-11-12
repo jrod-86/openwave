@@ -15,7 +15,7 @@ android {
     namespace "org.oxycblt.auxio"
 
     defaultConfig {
-        applicationId namespace
+        applicationId "io.github.jrod86.openwave"
         versionName "4.1.5"
         versionCode 75
 
