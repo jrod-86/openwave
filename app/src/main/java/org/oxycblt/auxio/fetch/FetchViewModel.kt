@@ -21,8 +21,10 @@ package org.oxycblt.auxio.fetch
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -38,6 +40,7 @@ import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.Song
+import org.oxycblt.musikr.metadata.TagWriter
 import org.oxycblt.musikr.tag.Name
 import timber.log.Timber as L
 
@@ -69,6 +72,12 @@ data class FetchItem(
         data object Skipped : Status
 
         data class Approved(val match: MetadataMatch, val cover: FetchedCover?) : Status
+
+        data object Saving : Status
+
+        data object Saved : Status
+
+        data object SaveFailed : Status
     }
 }
 
@@ -76,7 +85,14 @@ data class FetchItem(
 data class FetchedCover(val file: File, val thumbnail: Bitmap)
 
 /** Overall progress of the fetch screen. */
-data class FetchProgress(val scanned: Boolean, val running: Boolean, val done: Int, val total: Int)
+data class FetchProgress(
+    val scanned: Boolean,
+    val running: Boolean,
+    val done: Int,
+    val total: Int,
+    val saving: Boolean = false,
+    val approved: Int = 0,
+)
 
 @HiltViewModel
 class FetchViewModel
@@ -86,7 +102,13 @@ constructor(
     private val musicRepository: MusicRepository,
 ) : ViewModel() {
     private val lookup = MetadataLookup()
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private var job: Job? = null
+
+    /** Whether to copy each original file into the backup folder before changing it. */
+    var backupOriginals: Boolean
+        get() = prefs.getBoolean(KEY_BACKUP, true)
+        set(value) = prefs.edit { putBoolean(KEY_BACKUP, value) }
 
     val items: StateFlow<List<FetchItem>>
         field = MutableStateFlow<List<FetchItem>>(emptyList())
@@ -116,11 +138,15 @@ constructor(
         progress.update { it.copy(running = false) }
     }
 
-    fun skip(item: FetchItem) = setStatus(item.song.uid, FetchItem.Status.Skipped)
+    fun skip(item: FetchItem) {
+        setStatus(item.song.uid, FetchItem.Status.Skipped)
+        updateApprovedCount()
+    }
 
     fun approve(item: FetchItem) {
         val status = item.status as? FetchItem.Status.Found ?: return
         setStatus(item.song.uid, FetchItem.Status.Approved(status.match, status.cover))
+        updateApprovedCount()
     }
 
     fun approveAllFound() {
@@ -134,6 +160,82 @@ constructor(
                 }
             }
         }
+        updateApprovedCount()
+    }
+
+    /**
+     * Permanently write every approved match into its file. Only fields the song is missing are
+     * filled in (plus MusicBrainz IDs), so tags the user already has are never overwritten. The
+     * library is reloaded afterwards so the changes show up.
+     */
+    fun saveApproved() {
+        if (job?.isActive == true) return
+        val approved = items.value.filter { it.status is FetchItem.Status.Approved }
+        if (approved.isEmpty()) return
+        progress.update { it.copy(saving = true) }
+        job = viewModelScope.launch {
+            var saved = 0
+            for (item in approved) {
+                val status = item.status as FetchItem.Status.Approved
+                setStatus(item.song.uid, FetchItem.Status.Saving)
+                val ok =
+                    withContext(Dispatchers.IO) {
+                        try {
+                            if (backupOriginals) backUp(item.song)
+                            TagWriter.write(
+                                context,
+                                item.song.uri,
+                                tagsFor(item, status.match),
+                                status.cover
+                                    ?.takeIf { MissingField.ARTWORK in item.missing }
+                                    ?.file
+                                    ?.readBytes(),
+                            )
+                        } catch (e: Exception) {
+                            L.e(e, "Unable to save ${item.song.path}")
+                            false
+                        }
+                    }
+                if (ok) saved++
+                setStatus(
+                    item.song.uid,
+                    if (ok) FetchItem.Status.Saved else FetchItem.Status.SaveFailed,
+                )
+            }
+            L.d("Saved $saved of ${approved.size} songs")
+            updateApprovedCount()
+            progress.update { it.copy(saving = false) }
+            if (saved > 0) musicRepository.requestIndex(true)
+        }
+    }
+
+    private fun tagsFor(item: FetchItem, match: MetadataMatch): Map<String, String> {
+        val tags = mutableMapOf<String, String>()
+        if (MissingField.TITLE in item.missing) tags["TITLE"] = match.title
+        if (MissingField.ARTIST in item.missing) tags["ARTIST"] = match.artist
+        if (MissingField.ALBUM in item.missing) match.album?.let { tags["ALBUM"] = it }
+        if (item.song.date == null) match.year?.let { tags["DATE"] = it.toString() }
+        tags["MUSICBRAINZ_TRACKID"] = match.recordingId
+        match.releaseId?.let { tags["MUSICBRAINZ_ALBUMID"] = it }
+        match.releaseGroupId?.let { tags["MUSICBRAINZ_RELEASEGROUPID"] = it }
+        return tags
+    }
+
+    private fun backUp(song: Song) {
+        val dir = File(context.getExternalFilesDir(null), BACKUP_DIR).apply { mkdirs() }
+        val name = song.path.name ?: "${song.uid}"
+        var target = File(dir, name)
+        var n = 1
+        while (target.exists()) target = File(dir, "${n++}_$name")
+        val input =
+            context.contentResolver.openInputStream(song.uri)
+                ?: throw IllegalStateException("Unable to read ${song.path}")
+        input.use { source -> target.outputStream().use { source.copyTo(it) } }
+    }
+
+    private fun updateApprovedCount() {
+        val count = items.value.count { it.status is FetchItem.Status.Approved }
+        progress.update { it.copy(approved = count) }
     }
 
     private suspend fun lookUpAll() {
@@ -246,6 +348,8 @@ constructor(
 
     private companion object {
         const val THUMBNAIL_SIZE = 128
+        const val KEY_BACKUP = "openwave_fetch_backup_originals"
+        const val BACKUP_DIR = "Original files"
         val LEADING_TRACK = Regex("""^\d{1,3}[.\s-]+""")
     }
 }

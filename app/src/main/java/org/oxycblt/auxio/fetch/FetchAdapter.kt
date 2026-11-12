@@ -84,13 +84,19 @@ class FetchAdapter(
                     is FetchItem.Status.Failed -> R.string.lbl_fetch_failed
                     FetchItem.Status.Skipped -> R.string.lbl_fetch_skipped
                     is FetchItem.Status.Approved -> R.string.lbl_fetch_approved
+                    FetchItem.Status.Saving -> R.string.lbl_fetch_saving
+                    FetchItem.Status.Saved -> R.string.lbl_fetch_saved
+                    FetchItem.Status.SaveFailed -> R.string.lbl_fetch_save_failed
                 }
             )
 
             binding.fetchApprove.isVisible = item.status is FetchItem.Status.Found
             binding.fetchSkip.isVisible =
-                item.status !is FetchItem.Status.Skipped &&
-                    item.status !is FetchItem.Status.Approved
+                item.status is FetchItem.Status.Waiting ||
+                    item.status is FetchItem.Status.Searching ||
+                    item.status is FetchItem.Status.Found ||
+                    item.status is FetchItem.Status.NotFound ||
+                    item.status is FetchItem.Status.Failed
             binding.fetchApprove.setOnClickListener { onApprove(item) }
             binding.fetchSkip.setOnClickListener { onSkip(item) }
         }

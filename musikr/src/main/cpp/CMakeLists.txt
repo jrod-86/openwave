@@ -52,6 +52,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         JObjectRef.cpp
         JStringRef.cpp
         JByteArrayRef.cpp
+        openwave/tag_writer.cpp
 )
 target_link_options(${CMAKE_PROJECT_NAME}
         # @Tolriq found that these flags can reduce the size of the linked

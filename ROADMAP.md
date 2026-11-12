@@ -17,7 +17,7 @@ playback, gapless playback, folders, playlists, search, widgets.
 - [x] Look up matches by existing tags / file name on MusicBrainz, artwork from Cover Art Archive
 - Identify songs by audio fingerprint (Chromaprint + AcoustID), then MusicBrainz for tags
   and Cover Art Archive for artwork
-- Write approved tags and artwork permanently into the files (taglib), with an optional
+- [x] Write approved tags and artwork permanently into the files (taglib), with an optional
   "back up originals first" switch
 
 ## Milestone 2 — Volume normalization

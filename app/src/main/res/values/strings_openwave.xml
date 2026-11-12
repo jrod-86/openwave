@@ -4,7 +4,7 @@
     <string name="set_key_fetch" translatable="false">openwave_fetch_metadata</string>
     <string name="set_fetch">Fetch artwork &amp; info</string>
     <string name="set_fetch_desc">Find missing artwork, titles, artists and albums online</string>
-    <string name="lbl_fetch_intro">Openwave will look through your music for songs with missing artwork, titles, artists or albums, then search MusicBrainz and the Cover Art Archive for them. You can approve or skip each match. Nothing is changed yet.</string>
+    <string name="lbl_fetch_intro">Openwave will look through your music for songs with missing artwork, titles, artists or albums, then search MusicBrainz and the Cover Art Archive for them. You can approve or skip each match, then save the approved ones into your files.</string>
     <string name="lbl_fetch_nothing_missing">Every song already has artwork and full info.</string>
     <string name="fmt_fetch_progress">Searching… %1$d of %2$d songs checked</string>
     <string name="fmt_fetch_finished">Checked %1$d of %2$d songs</string>
@@ -28,5 +28,10 @@
     <string name="lbl_fetch_failed">Couldn\'t search (check your connection)</string>
     <string name="lbl_fetch_skipped">Skipped</string>
     <string name="lbl_fetch_approved">Approved</string>
+    <string name="lbl_fetch_saving">Saving…</string>
+    <string name="lbl_fetch_saved">Saved to file</string>
+    <string name="lbl_fetch_save_failed">Couldn\'t save to this file</string>
+    <string name="fmt_fetch_save">Save %d</string>
+    <string name="lbl_fetch_backup">Back up original files first</string>
     <string name="desc_fetch_cover">Artwork found online</string>
 </resources>

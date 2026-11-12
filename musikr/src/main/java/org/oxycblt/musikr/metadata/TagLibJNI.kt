@@ -39,4 +39,16 @@ internal object TagLibJNI {
     }
 
     private external fun openNative(inputStream: NativeInputStream): MetadataResult
+
+    /**
+     * Write tags and an optional front cover into the file behind [fd]. Takes ownership of [fd] and
+     * always closes it. Blocking.
+     */
+    external fun writeNative(
+        fd: Int,
+        keys: Array<String>,
+        values: Array<String>,
+        picture: ByteArray?,
+        pictureMimeType: String?,
+    ): Boolean
 }

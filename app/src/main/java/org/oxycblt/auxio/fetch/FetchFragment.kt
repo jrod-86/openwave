@@ -62,6 +62,11 @@ class FetchFragment : ViewBindingFragment<FragmentFetchBinding>() {
             if (fetchModel.progress.value.running) fetchModel.stop() else fetchModel.scan()
         }
         binding.fetchApproveAll.setOnClickListener { fetchModel.approveAllFound() }
+        binding.fetchSave.setOnClickListener { fetchModel.saveApproved() }
+        binding.fetchBackup.isChecked = fetchModel.backupOriginals
+        binding.fetchBackup.setOnCheckedChangeListener { _, checked ->
+            fetchModel.backupOriginals = checked
+        }
 
         collectImmediately(fetchModel.items, adapter::submitList)
         collectImmediately(fetchModel.progress, ::updateProgress)
@@ -93,6 +98,12 @@ class FetchFragment : ViewBindingFragment<FragmentFetchBinding>() {
                 else -> R.string.lbl_fetch_scan
             }
         )
+        binding.fetchScan.isEnabled = !progress.saving
+        binding.fetchSave.isVisible = progress.approved > 0 || progress.saving
+        binding.fetchSave.isEnabled = !progress.saving && !progress.running
+        binding.fetchSave.text =
+            if (progress.saving) getString(R.string.lbl_fetch_saving)
+            else getString(R.string.fmt_fetch_save, progress.approved)
         binding.fetchProgress.isVisible = progress.running
         binding.fetchProgress.max = progress.total.coerceAtLeast(1)
         binding.fetchProgress.progress = progress.done
