@@ -48,8 +48,8 @@ class Auxio : Application() {
         super.onCreate()
         @Suppress("KotlinConstantConditions")
         if (
-            BuildConfig.APPLICATION_ID != "org.oxycblt.auxio" &&
-                BuildConfig.APPLICATION_ID != "org.oxycblt.auxio.debug"
+            BuildConfig.APPLICATION_ID != "io.github.jrod86.openwave" &&
+                BuildConfig.APPLICATION_ID != "io.github.jrod86.openwave.debug"
         ) {
             Timber.plant(CopyleftNoticeTree())
         } else if (BuildConfig.DEBUG) {

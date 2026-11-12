@@ -1,3 +1,9 @@
+# Openwave
+
+> Openwave is a free, open-source offline music player for Android, forked from
+> [Auxio](https://github.com/OxygenCobalt/Auxio) by OxygenCobalt and licensed under GPL-3.0.
+> See [ROADMAP.md](ROADMAP.md) for planned features. The original Auxio README follows.
+
 <p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p>
 <h1 align="center"><b>Auxio</b></h1>
 <h4 align="center">A simple, rational music player for Android.</h4>
