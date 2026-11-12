@@ -12,8 +12,9 @@ playback, gapless playback, folders, playlists, search, widgets.
 - [x] GitHub Actions builds a debug APK on every push
 
 ## Milestone 1 — Fetch artwork and info
-- Settings > "Fetch artwork & info" scans the library for missing artwork or incomplete tags
-- Review list: approve or skip each song
+- [x] Settings > "Fetch artwork & info" scans the library for missing artwork or incomplete tags
+- [x] Review list: approve or skip each song
+- [x] Look up matches by existing tags / file name on MusicBrainz, artwork from Cover Art Archive
 - Identify songs by audio fingerprint (Chromaprint + AcoustID), then MusicBrainz for tags
   and Cover Art Archive for artwork
 - Write approved tags and artwork permanently into the files (taglib), with an optional

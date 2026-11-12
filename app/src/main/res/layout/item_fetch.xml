@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/spacing_medium"
+    android:paddingTop="@dimen/spacing_mid_medium"
+    android:paddingEnd="@dimen/spacing_medium"
+    android:paddingBottom="@dimen/spacing_small">
+
+    <ImageView
+        android:id="@+id/fetch_cover"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="@string/desc_fetch_cover"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_song_24" />
+
+    <TextView
+        android:id="@+id/fetch_file"
+        style="@style/Widget.Auxio.TextView.Item.Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fetch_cover"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="01 - Artist - Song.mp3" />
+
+    <TextView
+        android:id="@+id/fetch_missing"
+        style="@style/Widget.Auxio.TextView.Item.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fetch_cover"
+        app:layout_constraintTop_toBottomOf="@+id/fetch_file"
+        tools:text="Missing: artwork, album" />
+
+    <TextView
+        android:id="@+id/fetch_proposed"
+        style="@style/Widget.Auxio.TextView.Item.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:maxLines="3"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fetch_cover"
+        app:layout_constraintTop_toBottomOf="@+id/fetch_missing"
+        tools:text="Found: Song by Artist\nAlbum · 1999" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/fetch_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fetch_cover,fetch_proposed" />
+
+    <TextView
+        android:id="@+id/fetch_status"
+        style="@style/Widget.Auxio.TextView.Item.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/fetch_approve"
+        app:layout_constraintEnd_toStartOf="@+id/fetch_skip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fetch_approve"
+        tools:text="Match found" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fetch_skip"
+        style="@style/Widget.Auxio.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_fetch_skip"
+        app:layout_constraintEnd_toStartOf="@+id/fetch_approve"
+        app:layout_constraintTop_toBottomOf="@+id/fetch_barrier" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fetch_approve"
+        style="@style/Widget.Auxio.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_fetch_approve"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetch_barrier" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
